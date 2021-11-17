@@ -27,14 +27,22 @@ const refs = {
 };
 let tags = 0;
 let page = 1;
+
 refs.loadMoreBtn.addEventListener('click', () => {
-  fetchTag().then(photos => renderPhotos(photos));
+  fetchTag().then(photos => {
+    renderPhotos(photos);
+    page += 1;
+  });
 });
+
 refs.searchForm.addEventListener('submit', e => {
   e.preventDefault();
   tags = refs.searchForm.elements.searchQuery.value;
   //   refs.searchForm.reset();
-  fetchTag().then(photos => renderPhotos(photos));
+  fetchTag().then(photos => {
+    renderPhotos(photos);
+    page += 1;
+  });
 });
 
 function fetchTag() {
