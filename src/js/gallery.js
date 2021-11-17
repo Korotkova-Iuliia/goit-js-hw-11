@@ -19,7 +19,7 @@
 // });
 
 // OK\\\\\\\\\\\\\\\\
-// import { fetchTag } from './api';
+import { fetchTag } from './api';
 const refs = {
   searchForm: document.querySelector('#search-form'),
   //   input: document.querySelector('.searchQuery'),
@@ -30,7 +30,7 @@ let tags = 0;
 let page = 1;
 refs.loadMoreBtn.classList.add('is-hidden');
 refs.loadMoreBtn.addEventListener('click', () => {
-  fetchTag().then(photos => {
+  fetchTag(tags, page).then(photos => {
     renderPhotos(photos);
     page += 1;
   });
@@ -38,26 +38,16 @@ refs.loadMoreBtn.addEventListener('click', () => {
 
 refs.searchForm.addEventListener('submit', e => {
   e.preventDefault();
+
   tags = refs.searchForm.elements.searchQuery.value;
   //   refs.searchForm.reset();
-  fetchTag().then(photos => {
+  fetchTag(tags, page).then(photos => {
     renderPhotos(photos);
     page += 1;
     refs.loadMoreBtn.classList.remove('is-hidden');
   });
 });
-function fetchTag() {
-  const API_KEY = `24377768-1651c24dae1d00899e27f41ae`;
-  const BASE_URL = `https://pixabay.com/api`;
-  const URL = `${BASE_URL}/?key=${API_KEY}&q=${tags}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=4`;
 
-  return fetch(URL).then(response => {
-    if (!response.ok) {
-      throw new Error(response.status);
-    }
-    return response.json();
-  });
-}
 function renderPhotos({ hits }) {
   console.log(hits);
   const markup = hits
@@ -92,6 +82,10 @@ function renderPhotos({ hits }) {
   //  <img class="large-img" src="${largeImageURL}" alt="${tags}" weight="20" loading="lazy" />;
   refs.galleryList.insertAdjacentHTML('beforeend', markup);
 }
+// galleryListReset();
+// function galleryListReset() {
+//   galleryList.innerHTML = '';
+// }
 // ${hit.previewURL}
 // function notifyInfo() {
 //   Notify.info('Too many matches found. Please enter a more specific name.', {
