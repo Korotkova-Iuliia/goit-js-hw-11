@@ -23,19 +23,23 @@ const refs = {
   searchForm: document.querySelector('#search-form'),
   //   input: document.querySelector('.searchQuery'),
   galleryList: document.querySelector('.gallery'),
-  //   loadMoreBtn: document.querySelector('.load-more'),
+  loadMoreBtn: document.querySelector('.load-more'),
 };
 let tags = 0;
+let page = 1;
+refs.loadMoreBtn.addEventListener('click', () => {
+  fetchTag().then(photos => renderPhotos(photos));
+});
 refs.searchForm.addEventListener('submit', e => {
   e.preventDefault();
   tags = refs.searchForm.elements.searchQuery.value;
   //   refs.searchForm.reset();
-  fetchTag(tags).then(photos => renderPhotos(photos));
+  fetchTag().then(photos => renderPhotos(photos));
 });
 
 function fetchTag() {
   const API_KEY = `24377768-1651c24dae1d00899e27f41ae`;
-  const URL = `https://pixabay.com/api/?key=${API_KEY}&q=${tags}&image_type=photo&orientation=horizontal&safesearch=true`;
+  const URL = `https://pixabay.com/api/?key=${API_KEY}&q=${tags}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=4`;
 
   return fetch(URL).then(response => {
     if (!response.ok) {
@@ -44,29 +48,39 @@ function fetchTag() {
     return response.json();
   });
 }
-function renderPhotos(photos) {
-  console.log(photos);
-  //   const markup = photos.map(
-  //     photo => `<div class="photo-card">
-  //     <img src="" alt="" loading="lazy" />
-  //     <div class="info">
-  //       <p class="info-item">
-  //         <b>Likes</b>
-  //       </p>
-  //       <p class="info-item">
-  //         <b>Views</b>
-  //       </p>
-  //       <p class="info-item">
-  //         <b>Comments</b>
-  //       </p>
-  //       <p class="info-item">
-  //         <b>Downloads</b>
-  //       </p>
-  //     </div>
-  //   </div>`,
-  //   );
-  //     .join('');
-  //   refs.galleryList.innerHTML = markup;
+function renderPhotos({ hits }) {
+  console.log(hits);
+  const markup = hits
+    .map(
+      ({
+        webformatURL,
+        tags,
+        largeImageURL,
+        likes,
+        views,
+        comments,
+        downloads,
+      }) => `<div class="photo-card">
+    <img src="${webformatURL}" alt="${tags}" weight="20" loading="lazy" />
+    <img src="${largeImageURL}" alt="${tags}" weight="20" loading="lazy"/>
+    <div class="info">
+      <p class="info-item">
+        <b>Likes: ${likes} </b>
+      </p>
+      <p class="info-item">
+        <b>Views: ${views}</b>
+      </p>
+      <p class="info-item">
+        <b>Comments: ${comments}</b>
+      </p>
+      <p class="info-item">
+        <b>Downloads: ${downloads}</b>
+      </p>
+    </div>
+  </div>`,
+    )
+    .join('');
+  refs.galleryList.innerHTML = markup;
 }
 // ${hit.previewURL}
 // function notifyInfo() {
@@ -76,13 +90,6 @@ function renderPhotos(photos) {
 // {
 /* ; */
 // }
-// webformatURL - ссылка на маленькое изображение для списка карточек.
-// largeImageURL - ссылка на большое изображение.
-// tags - строка с описанием изображения. Подойдет для атрибута alt.
-// likes - количество лайков.
-// views - количество просмотров.
-// comments - количество комментариев.
-//     downloads - количество загрузок.
 
 // if {hits.lengs === 0} {
 // notifyFailure();
