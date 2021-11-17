@@ -33,6 +33,12 @@ refs.loadMoreBtn.addEventListener('click', () => {
   fetchTag(tags, page).then(photos => {
     renderPhotos(photos);
     page += 1;
+    console.log(photos.total);
+    console.log(photos.totalHits);
+    console.log(page > photos.total / 4);
+    if (page > photos.total / 4) {
+      refs.loadMoreBtn.classList.add('is-hidden');
+    }
   });
 });
 
@@ -40,7 +46,7 @@ refs.searchForm.addEventListener('submit', e => {
   e.preventDefault();
 
   tags = refs.searchForm.elements.searchQuery.value;
-  //   refs.searchForm.reset();
+  refs.searchForm.reset();
   fetchTag(tags, page).then(photos => {
     renderPhotos(photos);
     page += 1;
