@@ -19,6 +19,7 @@
 // });
 
 // OK\\\\\\\\\\\\\\\\
+// import { fetchTag } from './api';
 const refs = {
   searchForm: document.querySelector('#search-form'),
   //   input: document.querySelector('.searchQuery'),
@@ -27,7 +28,7 @@ const refs = {
 };
 let tags = 0;
 let page = 1;
-
+refs.loadMoreBtn.classList.add('is-hidden');
 refs.loadMoreBtn.addEventListener('click', () => {
   fetchTag().then(photos => {
     renderPhotos(photos);
@@ -42,12 +43,13 @@ refs.searchForm.addEventListener('submit', e => {
   fetchTag().then(photos => {
     renderPhotos(photos);
     page += 1;
+    refs.loadMoreBtn.classList.remove('is-hidden');
   });
 });
-
 function fetchTag() {
   const API_KEY = `24377768-1651c24dae1d00899e27f41ae`;
-  const URL = `https://pixabay.com/api/?key=${API_KEY}&q=${tags}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=4`;
+  const BASE_URL = `https://pixabay.com/api`;
+  const URL = `${BASE_URL}/?key=${API_KEY}&q=${tags}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=4`;
 
   return fetch(URL).then(response => {
     if (!response.ok) {
@@ -63,14 +65,13 @@ function renderPhotos({ hits }) {
       ({
         webformatURL,
         tags,
-        largeImageURL,
+        // largeImageURL,
         likes,
         views,
         comments,
         downloads,
       }) => `<div class="photo-card">
     <img src="${webformatURL}" alt="${tags}" weight="20" loading="lazy" />
-    <img src="${largeImageURL}" alt="${tags}" weight="20" loading="lazy"/>
     <div class="info">
       <p class="info-item">
         <b>Likes: ${likes} </b>
@@ -88,7 +89,8 @@ function renderPhotos({ hits }) {
   </div>`,
     )
     .join('');
-  refs.galleryList.innerHTML = markup;
+  //  <img class="large-img" src="${largeImageURL}" alt="${tags}" weight="20" loading="lazy" />;
+  refs.galleryList.insertAdjacentHTML('beforeend', markup);
 }
 // ${hit.previewURL}
 // function notifyInfo() {

@@ -1,5 +1,19 @@
-:root {
-  --timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+.load-more {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  cursor: pointer;
+}
+
+.load-more.is-hidden {
+  display: none;
+}
+/* .large-img.is-hidden {
+  display: none;
+} */
+
+/* :root { */
+/* --timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   --animation-duration: 250ms;
 }
 
@@ -39,4 +53,4 @@
 
 .gallery__link:hover {
   cursor: zoom-in;
-}
+} */
