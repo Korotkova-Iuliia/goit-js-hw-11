@@ -1,9 +1,10 @@
 // 1-я попытка..............
 // // OK\\\\\\\\\\\\\\\\//
+import 'simplelightbox/dist/simple-lightbox.min.css';
 import axios from 'axios';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import SimpleLightbox from 'simplelightbox';
-import 'simplelightbox/dist/simple-lightbox.min.css';
+import { fetchTag } from './api';
 
 // function onEntry(entries, observer) {
 //   entries.forEach(entry => {
@@ -28,7 +29,7 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 // });
 
 // OK\\\\\\\\\\\\\\\\
-import { fetchTag } from './api';
+
 const refs = {
   searchForm: document.querySelector('#search-form'),
   galleryList: document.querySelector('.gallery'),
@@ -50,6 +51,7 @@ refs.searchForm.addEventListener('input', e => {
 refs.loadMoreBtn.addEventListener('click', () => {
   fetchTag(tags, page, perPage).then(photos => {
     renderPhotos(photos);
+
     page += 1;
     if (page > photos.totalHits / perPage || photos.totalHits < perPage) {
       // console.log(photos.totalHits);
@@ -61,6 +63,7 @@ refs.loadMoreBtn.addEventListener('click', () => {
     }
     refs.loadMoreBtn.classList.remove('is-hidden');
   });
+  lightbox;
 });
 
 refs.searchForm.addEventListener('submit', e => {
@@ -71,6 +74,7 @@ refs.searchForm.addEventListener('submit', e => {
 
   fetchTag(tags, page).then(photos => {
     renderPhotos(photos);
+    lightbox;
     notifySuccess(photos.totalHits);
 
     page += 1;
@@ -90,6 +94,7 @@ function renderPhotos({ hits }) {
   if (hits.length === 0) {
     notifyFailure();
   }
+
   console.log(hits);
   const markup = hits
     .map(
@@ -118,18 +123,12 @@ function renderPhotos({ hits }) {
       </p>
     </div>
     </div>
-  </a></li>`,
+  </a>
+  </li>`,
     )
     .join('');
 
   refs.galleryList.insertAdjacentHTML('beforeend', markup);
-  const lightbox = new SimpleLightbox('.gallery a', {
-    captionsData: 'alt',
-    captionDelay: 250,
-    enableKeyboard: true,
-    animationSlide: true,
-    animationSpeed: 250,
-  });
 }
 
 function reset() {
@@ -153,6 +152,13 @@ function notifySuccess(totalHits) {
     showOnlyTheLastOne: true,
   });
 }
+const lightbox = new SimpleLightbox('.hits a', {
+  captionsData: 'alt',
+  captionDelay: 250,
+  enableKeyboard: true,
+  animationSlide: true,
+  animationSpeed: 250,
+});
 // ;
 // ${hit.previewURL}
 // function notifyInfo() {
