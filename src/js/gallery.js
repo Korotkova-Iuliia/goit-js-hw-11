@@ -1,13 +1,13 @@
 // 1-я попытка..............
 // // OK\\\\\\\\\\\\\\\\//
-// import axios from 'axios';
-// import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import axios from 'axios';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
-// function notifyFailure() {
-//   Notify.failure('Sorry, there are no images matching your search query. Please try again.', {
-//     showOnlyTheLastOne: true,
-//   });
-// }
+function notifyFailure() {
+  Notify.failure('Sorry, there are no images matching your search query. Please try again.', {
+    showOnlyTheLastOne: true,
+  });
+}
 
 // eg\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
@@ -25,31 +25,31 @@ const refs = {
   galleryList: document.querySelector('.gallery'),
   loadMoreBtn: document.querySelector('.load-more'),
   inputEl: document.querySelector('.searchQuery'),
-  perPage: 40,
 };
-
+const perPage = 40;
 let tags = 0;
 let page = 1;
 
 refs.loadMoreBtn.classList.add('is-hidden');
-
-refs.loadMoreBtn.addEventListener('click', () => {
-  fetchTag(tags, page, refs.perPage).then(photos => {
-    renderPhotos(photos);
-    page += 1;
-    console.log(photos.total);
-    console.log(page > photos.totalHits / refs.perPage);
-    if (page > photos.totalHits / refs.perPage) {
-      refs.loadMoreBtn.classList.add('is-hidden');
-    }
-  });
-});
 refs.searchForm.addEventListener('input', e => {
   if (e.target !== 0) {
     refs.loadMoreBtn.classList.add('is-hidden');
     return reset();
   }
 });
+
+refs.loadMoreBtn.addEventListener('click', () => {
+  fetchTag(tags, page, perPage).then(photos => {
+    renderPhotos(photos);
+    page += 1;
+    console.log(photos.total);
+    console.log(page > photos.totalHits / perPage);
+    // if (page > photos.totalHits / perPage) {
+    //   refs.loadMoreBtn.classList.add('is-hidden');
+    // }
+  });
+});
+
 refs.searchForm.addEventListener('submit', e => {
   e.preventDefault();
 
@@ -59,7 +59,7 @@ refs.searchForm.addEventListener('submit', e => {
   fetchTag(tags, page).then(photos => {
     renderPhotos(photos);
     page += 1;
-    if (page > photos.totalHits / refs.perPage) {
+    if (page > photos.totalHits / perPage) {
       refs.loadMoreBtn.classList.add('is-hidden');
     }
     refs.loadMoreBtn.classList.remove('is-hidden');
@@ -67,6 +67,9 @@ refs.searchForm.addEventListener('submit', e => {
 });
 
 function renderPhotos({ hits }) {
+  if (hits.length === 0) {
+    notifyFailure();
+  }
   console.log(hits);
   const markup = hits
     .map(
@@ -79,7 +82,7 @@ function renderPhotos({ hits }) {
         comments,
         downloads,
       }) => `<div class="photo-card">
-    <img src="${webformatURL}" alt="${tags}" weight="20" loading="lazy" />
+    <img src="${webformatURL}" alt="${tags}" loading="lazy" />
     <div class="info">
       <p class="info-item">
         <b>Likes: ${likes} </b>
@@ -106,6 +109,7 @@ function reset() {
 
   refs.galleryList.innerHTML = '';
 }
+
 // ${hit.previewURL}
 // function notifyInfo() {
 //   Notify.info('Too many matches found. Please enter a more specific name.', {
