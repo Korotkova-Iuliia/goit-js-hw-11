@@ -63,7 +63,6 @@ refs.loadMoreBtn.addEventListener('click', () => {
     }
     refs.loadMoreBtn.classList.remove('is-hidden');
   });
-  lightbox;
 });
 
 refs.searchForm.addEventListener('submit', e => {
@@ -74,8 +73,9 @@ refs.searchForm.addEventListener('submit', e => {
 
   fetchTag(tags, page).then(photos => {
     renderPhotos(photos);
-    lightbox;
-    notifySuccess(photos.totalHits);
+    if (photos.totalHits > 0) {
+      notifySuccess(photos.totalHits);
+    }
 
     page += 1;
     if (page > photos.totalHits / perPage || photos.totalHits < perPage) {
@@ -98,38 +98,39 @@ function renderPhotos({ hits }) {
   console.log(hits);
   const markup = hits
     .map(
-      ({
-        webformatURL,
-        tags,
-        largeImageURL,
-        likes,
-        views,
-        comments,
-        downloads,
-      }) => `<li><a class="gallery__item"  href="${largeImageURL}"></div class="gallery__item_card">
-    <img class="gallery__image" src="${webformatURL}" alt="${tags}" loading="lazy" />
-    <div class="info">
-      <p class="info-item">
-        <b>Likes: ${likes} </b>
-      </p>
-      <p class="info-item">
-        <b>Views: ${views}</b>
-      </p>
-      <p class="info-item">
-        <b>Comments: ${comments}</b>
-      </p>
-      <p class="info-item">
-        <b>Downloads: ${downloads}</b>
-      </p>
-    </div>
-    </div>
-  </a>
-  </li>`,
+      ({ webformatURL, tags, largeImageURL, likes, views, comments, downloads }) =>
+        `<li class="gallery__link">
+        <a class="gallery__item" href="${largeImageURL}"></div class="gallery__item_card">
+                  <img class="gallery__image" src="${webformatURL}" alt="${tags}" loading="lazy" />
+                    <div class="gallery__item_info">
+                        <p class="item-info">
+                          <b>Likes: </b>${likes}
+                        </p>
+                        <p class="item-info">
+                          <b>Views: </b>${views}
+                        </p>
+                        <p class="item-info">
+                          <b>Comments: </b>${comments}
+                        </p>
+                        <p class="item-info">
+                          <b>Downloads: </b>${downloads}
+                        </p>
+                    </div>
+                </div>
+          </a>
+      </li>`,
     )
     .join('');
 
   refs.galleryList.insertAdjacentHTML('beforeend', markup);
 }
+const lightbox = new SimpleLightbox('.hits a', {
+  captionsData: 'alt',
+  captionDelay: 250,
+  enableKeyboard: true,
+  animationSlide: true,
+  animationSpeed: 250,
+});
 //  return `<li><a class="gallery__item" href="${original}">
 //   <img class="gallery__image" src="${preview}" alt="${description}" />
 // </a></li>`;
@@ -155,13 +156,7 @@ function notifySuccess(totalHits) {
     showOnlyTheLastOne: true,
   });
 }
-const lightbox = new SimpleLightbox('.hits a', {
-  captionsData: 'alt',
-  captionDelay: 250,
-  enableKeyboard: true,
-  animationSlide: true,
-  animationSpeed: 250,
-});
+
 // ;
 // ${hit.previewURL}
 // function notifyInfo() {
