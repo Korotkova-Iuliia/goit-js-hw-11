@@ -106,8 +106,8 @@ function renderPhotos({ hits }) {
         views,
         comments,
         downloads,
-      }) => `<li><a class="photo-link"  href="${largeImageURL}"></div class="photo-card">
-    <img src="${webformatURL}" alt="${tags}" loading="lazy" />
+      }) => `<li><a class="gallery__item"  href="${largeImageURL}"></div class="gallery__item_card">
+    <img class="gallery__image" src="${webformatURL}" alt="${tags}" loading="lazy" />
     <div class="info">
       <p class="info-item">
         <b>Likes: ${likes} </b>
@@ -130,7 +130,10 @@ function renderPhotos({ hits }) {
 
   refs.galleryList.insertAdjacentHTML('beforeend', markup);
 }
-
+//  return `<li><a class="gallery__item" href="${original}">
+//   <img class="gallery__image" src="${preview}" alt="${description}" />
+// </a></li>`;
+//   })
 function reset() {
   console.log('сброс');
 
