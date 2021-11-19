@@ -120,10 +120,12 @@ function renderPhotos(hits) {
     .join('');
 
   refs.galleryList.insertAdjacentHTML('beforeend', markup);
+  lightbox.refresh();
 }
 const lightbox = new SimpleLightbox('.hits a', {
   captionsData: 'alt',
   captionDelay: 250,
+
   enableKeyboard: true,
   animationSlide: true,
   animationSpeed: 250,
