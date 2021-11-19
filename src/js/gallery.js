@@ -59,7 +59,6 @@ refs.loadMoreBtn.addEventListener('click', () => {
 
 refs.searchForm.addEventListener('submit', e => {
   e.preventDefault();
-
   surchtags = refs.searchForm.elements.searchQuery.value;
   console.log(surchtags);
 
