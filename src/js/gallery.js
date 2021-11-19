@@ -3,7 +3,6 @@ import { Notify } from 'notiflix/build/notiflix-notify-aio';
 // import { getAxiosTag } from './api';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
-
 const refs = {
   searchForm: document.querySelector('#search-form'),
   galleryList: document.querySelector('.gallery'),
@@ -13,20 +12,16 @@ const refs = {
 const perPage = 40;
 let surchtags = '';
 let page = 1;
-
 const API_KEY = `24377768-1651c24dae1d00899e27f41ae`;
 const BASE_URL = `https://pixabay.com/api`;
-
 async function getAxiosTag(surchtags, page) {
   const URL = `${BASE_URL}/?key=${API_KEY}&q=${surchtags}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=${40}`;
-
   console.log(surchtags);
   try {
     const response = await axios.get(URL);
     console.log(response);
     console.log(response.data);
     console.log(response.data.hits);
-
     return await response.data;
   } catch (error) {
     console.log(error);
@@ -40,11 +35,9 @@ refs.searchForm.addEventListener('input', e => {
     return reset();
   }
 });
-
 refs.loadMoreBtn.addEventListener('click', () => {
   getAxiosTag(surchtags, page).then(photos => {
     renderPhotos(surchtags, page);
-
     page += 1;
     if (page > photos.totalHits / perPage || photos.totalHits < perPage) {
       // console.log(photos.totalHits);
@@ -57,12 +50,10 @@ refs.loadMoreBtn.addEventListener('click', () => {
     refs.loadMoreBtn.classList.remove('is-hidden');
   });
 });
-
 refs.searchForm.addEventListener('submit', e => {
   e.preventDefault();
   surchtags = refs.searchForm.elements.searchQuery.value;
   console.log(surchtags);
-
   getAxiosTag(surchtags, page).then(photos => {
     renderPhotos(photos.hits);
     console.log(photos);
@@ -77,27 +68,25 @@ refs.searchForm.addEventListener('submit', e => {
       // console.log(perPage);
       // console.log(photos.totalHits < perPage);
       // console.log(page > photos.totalHits / perPage);
-
       return refs.loadMoreBtn.classList.add('is-hidden');
     }
     refs.loadMoreBtn.classList.remove('is-hidden');
   });
 });
-
 // console.log(photos);
 // console.log(photos.hits);
-
 function renderPhotos(hits) {
   if (hits.length === 0) {
     notifyFailure();
   }
   console.log(hits.length);
-
   const markup = hits
     .map(
       ({ webformatURL, tags, largeImageURL, likes, views, comments, downloads }) =>
-        `<li class="gallery__link">
-        <a class="gallery__item" href="${largeImageURL}"></div class="gallery__item_card">
+        `
+       
+        <a class="gallery__item" href="${largeImageURL}">
+      
                   <img class="gallery__image" src="${webformatURL}" alt="${tags}" loading="lazy" />
                     <div class="gallery__item_info">
                         <p class="item-info">
@@ -113,29 +102,27 @@ function renderPhotos(hits) {
                           <b>Downloads: </b>${downloads}
                         </p>
                     </div>
-                </div>
+                
           </a>
-      </li>`,
+    
+      `,
     )
     .join('');
-
   refs.galleryList.insertAdjacentHTML('beforeend', markup);
   lightbox.refresh();
 }
-const lightbox = new SimpleLightbox('.hits a', {
-  captionsData: 'alt',
-  captionDelay: 250,
-
-  enableKeyboard: true,
-  animationSlide: true,
-  animationSpeed: 250,
+const lightbox = new SimpleLightbox('.gallery a', {
+  captions: true,
+  // captionsData: 'alt',
+  // captionDelay: 250,
+  // enableKeyboard: true,
+  // animationSlide: true,
+  // animationSpeed: 250,
 });
-
 function reset() {
   console.log('сброс');
   refs.galleryList.innerHTML = '';
 }
-
 function notifyFailure() {
   Notify.failure('Sorry, there are no images matching your search query. Please try again.', {
     showOnlyTheLastOne: true,
@@ -151,7 +138,6 @@ function notifySuccess(totalHits) {
     showOnlyTheLastOne: true,
   });
 }
-
 // ;
 // ${hit.previewURL}
 // function notifyInfo() {
@@ -161,7 +147,6 @@ function notifySuccess(totalHits) {
 // {
 /* ; */
 // }
-
 // if {hits.lengs === 0} {
 // notifyFailure();
 // console.log('ошибка')
@@ -171,14 +156,12 @@ function notifySuccess(totalHits) {
 // const { height: cardHeight } = document
 //   .querySelector('.gallery')
 //   .firstElementChild.getBoundingClientRect();
-
 // window.scrollBy({
 //   top: cardHeight * 2,
 //   behavior: 'smooth',
 // });
 // \\\\\\\\\\\\\\\\
 // // \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-
 // // function onEntry({ hits }, observer) {
 // //   console.log(hits);
 // //   hits.forEach(hit => {
@@ -188,13 +171,11 @@ function notifySuccess(totalHits) {
 // //     }
 // //   });
 // // }
-
 // // const observer = new IntersectionObserver(onEntry, {
 // //   root: null,
 // //   rootMargin: '2px',
 // //   threshold: 0.7,
 // // });
-
 // //\..............1-я попытка..... зроблено без axios ...............\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 // //
 // // // OK\\\\\\\\\\\\\\\\//
@@ -203,7 +184,6 @@ function notifySuccess(totalHits) {
 // import { Notify } from 'notiflix/build/notiflix-notify-aio';
 // import SimpleLightbox from 'simplelightbox';
 // import { fetchTag } from './api';
-
 // // function onEntry(entries, observer) {
 // //   entries.forEach(entry => {
 // //     if (entry.isIntersecting) {
@@ -218,16 +198,13 @@ function notifySuccess(totalHits) {
 // //   threshold: 0.5,
 // // });
 // // eg\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-
 // //   if (parseInt(data.totalHits) > 0)
 // //     $.each(data.hits, function (i, hit) {
 // //       console.log(hit.pageURL);
 // //     });
 // //   else console.log('No hits');
 // // });
-
 // // OK\\\\\\\\\\\\\\\\
-
 // const refs = {
 //   searchForm: document.querySelector('#search-form'),
 //   galleryList: document.querySelector('.gallery'),
@@ -237,7 +214,6 @@ function notifySuccess(totalHits) {
 // const perPage = 40;
 // let tags = 0;
 // let page = 1;
-
 // refs.loadMoreBtn.classList.add('is-hidden');
 // refs.searchForm.addEventListener('input', e => {
 //   if (e.target !== 0) {
@@ -245,11 +221,9 @@ function notifySuccess(totalHits) {
 //     return reset();
 //   }
 // });
-
 // refs.loadMoreBtn.addEventListener('click', () => {
 //   fetchTag(tags, page, perPage).then(photos => {
 //     renderPhotos(photos);
-
 //     page += 1;
 //     if (page > photos.totalHits / perPage || photos.totalHits < perPage) {
 //       // console.log(photos.totalHits);
@@ -262,37 +236,30 @@ function notifySuccess(totalHits) {
 //     refs.loadMoreBtn.classList.remove('is-hidden');
 //   });
 // });
-
 // refs.searchForm.addEventListener('submit', e => {
 //   e.preventDefault();
-
 //   tags = refs.searchForm.elements.searchQuery.value;
 //   refs.searchForm.reset();
-
 //   fetchTag(tags, page).then(photos => {
 //     renderPhotos(photos);
 //     if (photos.totalHits > 0) {
 //       notifySuccess(photos.totalHits);
 //     }
-
 //     page += 1;
 //     if (page > photos.totalHits / perPage || photos.totalHits < perPage) {
 //       // console.log(photos.totalHits);
 //       // console.log(perPage);
 //       // console.log(photos.totalHits < perPage);
 //       // console.log(page > photos.totalHits / perPage);
-
 //       return refs.loadMoreBtn.classList.add('is-hidden');
 //     }
 //     refs.loadMoreBtn.classList.remove('is-hidden');
 //   });
 // });
-
 // function renderPhotos({ hits }) {
 //   if (hits.length === 0) {
 //     notifyFailure();
 //   }
-
 //   console.log(hits);
 //   const markup = hits
 //     .map(
@@ -319,7 +286,6 @@ function notifySuccess(totalHits) {
 //       </li>`,
 //     )
 //     .join('');
-
 //   refs.galleryList.insertAdjacentHTML('beforeend', markup);
 // }
 // const lightbox = new SimpleLightbox('.hits a', {
@@ -329,12 +295,10 @@ function notifySuccess(totalHits) {
 //   animationSlide: true,
 //   animationSpeed: 250,
 // });
-
 // function reset() {
 //   console.log('сброс');
 //   refs.galleryList.innerHTML = '';
 // }
-
 // function notifyFailure() {
 //   Notify.failure('Sorry, there are no images matching your search query. Please try again.', {
 //     showOnlyTheLastOne: true,
@@ -350,7 +314,6 @@ function notifySuccess(totalHits) {
 //     showOnlyTheLastOne: true,
 //   });
 // }
-
 // // ;
 // // ${hit.previewURL}
 // // function notifyInfo() {
@@ -360,20 +323,16 @@ function notifySuccess(totalHits) {
 // // {
 // /* ; */
 // // }
-
 // // if {hits.lengs === 0} {
 // // notifyFailure();
 // // console.log('ошибка')
 // // };
-
 // // end\\\\\\\\\\\\\\\\
-
 // // refs.form.addEventListener('input', e => {
 // //   //  const login = searchbox.elements.login.value;
 // //   tag = e.target.value;
 // //   console.log(e.target.value);
 // // });
-
 // // function showPhoto({ main, weather, name }) {
 // //   refs.temperatureDescription.textContent = weather[0].main;
 // //   refs.temmperatureDegree.textContent = Math.round(main.temp);
@@ -392,14 +351,12 @@ function notifySuccess(totalHits) {
 // // \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 // // const searchbox = document.querySelector('.searchbox > input');
 // // const profileContainer = document.querySelector('.profile-section');
-
 // // searchbox.addEventListener('submit', e => {
 // //   e.preventDefault();
 // //   const login = searchbox.elements.login.value;
 // //   fetchUser(login).then(showProfile);
 // //   searchbox.reset();
 // // });
-
 // // searchbox.addEventListener(
 // //   'input',
 // //   debounce(() => {
