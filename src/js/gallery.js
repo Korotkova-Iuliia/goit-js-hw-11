@@ -17,8 +17,9 @@ let page = 1;
 const API_KEY = `24377768-1651c24dae1d00899e27f41ae`;
 const BASE_URL = `https://pixabay.com/api`;
 
-const URL = `${BASE_URL}/?key=${API_KEY}&q=${surchtags}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=${40}`;
 async function getAxiosTag(surchtags, page) {
+  const URL = `${BASE_URL}/?key=${API_KEY}&q=${surchtags}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=${40}`;
+
   console.log(surchtags);
   try {
     const response = await axios.get(URL);
