@@ -11,19 +11,21 @@ const refs = {
   inputEl: document.querySelector('.searchQuery'),
 };
 const perPage = 40;
-let tags = '';
+let surchtags = '';
 let page = 1;
 
 const API_KEY = `24377768-1651c24dae1d00899e27f41ae`;
 const BASE_URL = `https://pixabay.com/api`;
 
-console.log(tags);
-const URL = `${BASE_URL}/?key=${API_KEY}&q=${tags}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=${40}`;
-async function getAxiosTag(tags, page) {
+const URL = `${BASE_URL}/?key=${API_KEY}&q=${surchtags}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=${40}`;
+async function getAxiosTag(surchtags, page) {
+  console.log(surchtags);
   try {
     const response = await axios.get(URL);
-    // console.log(response);
+    console.log(response);
     console.log(response.data);
+    console.log(response.data.hits);
+
     return await response.data;
   } catch (error) {
     console.log(error);
@@ -31,6 +33,7 @@ async function getAxiosTag(tags, page) {
 }
 refs.loadMoreBtn.classList.add('is-hidden');
 refs.searchForm.addEventListener('input', e => {
+  console.log(e.target);
   if (e.target !== 0) {
     refs.loadMoreBtn.classList.add('is-hidden');
     return reset();
@@ -38,8 +41,8 @@ refs.searchForm.addEventListener('input', e => {
 });
 
 refs.loadMoreBtn.addEventListener('click', () => {
-  getAxiosTag(tags, page, perPage).then(photos => {
-    renderPhotos(photos);
+  getAxiosTag(surchtags, page).then(photos => {
+    renderPhotos(surchtags, page);
 
     page += 1;
     if (page > photos.totalHits / perPage || photos.totalHits < perPage) {
@@ -57,15 +60,17 @@ refs.loadMoreBtn.addEventListener('click', () => {
 refs.searchForm.addEventListener('submit', e => {
   e.preventDefault();
 
-  tags = refs.searchForm.elements.searchQuery.value;
-  refs.searchForm.reset();
+  surchtags = refs.searchForm.elements.searchQuery.value;
+  console.log(surchtags);
 
-  getAxiosTag(tags, page).then(photos => {
-    renderPhotos(photos);
+  getAxiosTag(surchtags, page).then(photos => {
+    renderPhotos(photos.hits);
+    console.log(photos);
+    console.log(photos.hits);
     if (photos.totalHits > 0) {
       notifySuccess(photos.totalHits);
     }
-
+    // refs.searchForm.reset();
     page += 1;
     if (page > photos.totalHits / perPage || photos.totalHits < perPage) {
       // console.log(photos.totalHits);
@@ -79,12 +84,15 @@ refs.searchForm.addEventListener('submit', e => {
   });
 });
 
-function renderPhotos({ hits }) {
+// console.log(photos);
+// console.log(photos.hits);
+
+function renderPhotos(hits) {
   if (hits.length === 0) {
     notifyFailure();
   }
+  console.log(hits.length);
 
-  console.log(hits);
   const markup = hits
     .map(
       ({ webformatURL, tags, largeImageURL, likes, views, comments, downloads }) =>
