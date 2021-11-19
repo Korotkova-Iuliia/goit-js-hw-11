@@ -19,12 +19,16 @@ const BASE_URL = `https://pixabay.com/api`;
 
 console.log(tags);
 const URL = `${BASE_URL}/?key=${API_KEY}&q=${tags}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=${40}`;
-const getAxiosTag = async () => {
-  const response = await axios.get(URL);
-  // console.log(response);
-  console.log(response.data);
-  return response.data;
-};
+async function getAxiosTag(tags, page) {
+  try {
+    const response = await axios.get(URL);
+    // console.log(response);
+    console.log(response.data);
+    return await response.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
 refs.loadMoreBtn.classList.add('is-hidden');
 refs.searchForm.addEventListener('input', e => {
   if (e.target !== 0) {
