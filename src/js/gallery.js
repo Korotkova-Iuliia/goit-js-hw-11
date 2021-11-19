@@ -27,8 +27,18 @@ const getAxiosTag = async () => {
   console.log(response.data);
   return response.data;
 };
-console.log(getAxiosTag(tags, page, perPage));
-getAxiosTag(tags, page, perPage);
+console.log(getAxiosTag(tags, page, perPage).then(any => any));
+getAxiosTag({ tags, page, perPage }).then(any => console.log(any.hits));
+getAxiosTag(tags, page, perPage)
+  .then(photos => {
+    console.log(photos);
+    renderPhotos(photos);
+  })
+  .catch(error => console.log(error));
+// vvvvvvvvvvvvvvvvvvvvvvv
+//  fetchTag(tags, page).then(photos => {
+//     renderPhotos(photos);
+// vvvvvvvvvvvvvvvvvvvv
 // console.log(getAxiosTag());
 // getAxiosTag()
 //   .then(data)
@@ -121,43 +131,43 @@ getAxiosTag(tags, page, perPage);
 // //   threshold: 0.7,
 // // });
 
-// function renderPhotos({ hits }) {
-//   // if (hits.length === 0) {
-//   //   notifyFailure();
-//   // }
+function renderPhotos({ hits }) {
+  //   // if (hits.length === 0) {
+  //   //   notifyFailure();
+  //   // }
 
-//   console.log(hits);
-//   const markup = hits
-//     .map(
-//       ({ webformatURL, tags, largeImageURL, likes, views, comments, downloads }) =>
-//         `<li class="gallery__link">
+  console.log(hits);
+  const markup = hits
+    .map(
+      ({ webformatURL, tags, largeImageURL, likes, views, comments, downloads }) =>
+        `<li class="gallery__link">
 
-//         <a class="gallery__item" href="${largeImageURL}">
-//         </div class="gallery__item_card">
-//          <img class="gallery__image" src="${webformatURL}" alt="${tags}" loading="lazy" />
-//         <div class="gallery__item_info">
-//                         <p class="item-info">
-//                           <b>Likes: </b>${likes}
-//                         </p>
-//                         <p class="item-info">
-//                           <b>Views: </b>${views}
-//                         </p>
-//                         <p class="item-info">
-//                           <b>Comments: </b>${comments}
-//                         </p>
-//                         <p class="item-info">
-//                           <b>Downloads: </b>${downloads}
-//                         </p>
-//                     </div>
-//                   </div>
-//           </a>
+          <a class="gallery__item" href="${largeImageURL}">
+          </div class="gallery__item_card">
+           <img class="gallery__image" src="${webformatURL}" alt="${tags}" loading="lazy" />
+          <div class="gallery__item_info">
+                          <p class="item-info">
+                            <b>Likes: </b>${likes}
+                          </p>
+                          <p class="item-info">
+                            <b>Views: </b>${views}
+                          </p>
+                          <p class="item-info">
+                            <b>Comments: </b>${comments}
+                          </p>
+                          <p class="item-info">
+                            <b>Downloads: </b>${downloads}
+                          </p>
+                      </div>
+                    </div>
+            </a>
 
-//       </li>`,
-//     )
-//     .join('');
+        </li>`,
+    )
+    .join('');
 
-//   refs.galleryList.insertAdjacentHTML('beforeend', markup);
-// }
+  refs.galleryList.insertAdjacentHTML('beforeend', markup);
+}
 
 // function reset() {
 //   console.log('сброс');
@@ -180,13 +190,13 @@ getAxiosTag(tags, page, perPage);
 //     showOnlyTheLastOne: true,
 //   });
 // }
-// const lightbox = new SimpleLightbox('.gallery a', {
-//   captionsData: 'alt',
-//   captionDelay: 250,
-//   enableKeyboard: true,
-//   animationSlide: true,
-//   animationSpeed: 250,
-// });
+const lightbox = new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
+  captionDelay: 250,
+  enableKeyboard: true,
+  animationSlide: true,
+  animationSpeed: 250,
+});
 
 // //\\\\\\\\\\\\\\\\\\\\\\\\\ зроблено без axios \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 // // 1-я попытка..............
