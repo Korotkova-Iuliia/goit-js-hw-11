@@ -52,7 +52,7 @@ li {
   color: #212121;
   text-decoration: none;
 }
-/* .gallery__link {
+.gallery__link {
   display: block;
   text-decoration: none;
   height: 100%;
@@ -60,4 +60,4 @@ li {
 
 .gallery__link:hover {
   cursor: zoom-in;
-} 
+}
