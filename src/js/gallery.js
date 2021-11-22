@@ -28,16 +28,16 @@ async function getAxiosTag(surchtags, page) {
   }
 }
 refs.loadMoreBtn.classList.add('is-hidden');
-refs.searchForm.addEventListener('input', e => {
-  console.log(e.target);
-  if (e.target !== 0) {
-    refs.loadMoreBtn.classList.add('is-hidden');
-    return reset();
-  }
-});
+// refs.searchForm.addEventListener('input', e => {
+//   console.log(e.target);
+//   if (e.target !== 0) {
+//     refs.loadMoreBtn.classList.add('is-hidden');
+//     return reset();
+//   }
+// });
 refs.loadMoreBtn.addEventListener('click', () => {
   getAxiosTag(surchtags, page).then(photos => {
-    renderPhotos(surchtags, page);
+    renderPhotos(photos.hits);
     page += 1;
     if (page > photos.totalHits / perPage || photos.totalHits < perPage) {
       // console.log(photos.totalHits);
@@ -52,15 +52,21 @@ refs.loadMoreBtn.addEventListener('click', () => {
 });
 refs.searchForm.addEventListener('submit', e => {
   e.preventDefault();
-  surchtags = refs.searchForm.elements.searchQuery.value;
+  surchtags = refs.searchForm.elements.searchQuery.value.trim();
+  if (surchtags === '') {
+    reset();
+    return notifyFailure();
+  }
   console.log(surchtags);
   getAxiosTag(surchtags, page).then(photos => {
     renderPhotos(photos.hits);
     console.log(photos);
     console.log(photos.hits);
+
     if (photos.totalHits > 0) {
       notifySuccess(photos.totalHits);
     }
+
     // refs.searchForm.reset();
     page += 1;
     if (page > photos.totalHits / perPage || photos.totalHits < perPage) {
@@ -84,7 +90,7 @@ function renderPhotos(hits) {
     .map(
       ({ webformatURL, tags, largeImageURL, likes, views, comments, downloads }) =>
         `
-    <div class="gallery-list">
+    <li class="gallery-list">
         <a class="gallery__link" href="${largeImageURL}">
                   <div class="gallery__card">
                    <img class="gallery__image" src="${webformatURL}" alt="${tags}" loading="lazy" />
@@ -104,7 +110,7 @@ function renderPhotos(hits) {
                     </div>
                </div>
         </a>
-     </div>
+     </li>
       `,
     )
     .join('');
@@ -114,10 +120,10 @@ function renderPhotos(hits) {
 const lightbox = new SimpleLightbox('.gallery a', {
   captions: true,
   // captionsData: 'alt',
-  // captionDelay: 250,
-  // enableKeyboard: true,
-  // animationSlide: true,
-  // animationSpeed: 250,
+  captionDelay: 250,
+  enableKeyboard: true,
+  animationSlide: true,
+  animationSpeed: 250,
 });
 function reset() {
   console.log('сброс');
