@@ -9,12 +9,16 @@
     <link rel="stylesheet" href="css/gallery.css" />
   </head>
   <body>
-    <form class="search-form" id="search-form">
-      <input type="text" name="searchQuery" autocomplete="off" placeholder="Search images..." />
-      <button type="submit">Search</button>
-    </form>
-    <div class="gallery"></div>
-    <button type="button" class="load-more">Load more</button>
+    <div class="container">
+      <form class="search-form section" id="search-form">
+        <input type="text" name="searchQuery" autocomplete="off" placeholder="Search images..." />
+        <button type="submit">Search</button>
+      </form>
+      <ul class="gallery section"></ul>
+      <div class="section">
+        <button type="button" class="load-more">Load more</button>
+      </div>
+    </div>
     <script src="js/gallery.js"></script>
   </body>
 </html>

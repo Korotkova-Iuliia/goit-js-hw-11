@@ -84,11 +84,11 @@ function renderPhotos(hits) {
     .map(
       ({ webformatURL, tags, largeImageURL, likes, views, comments, downloads }) =>
         `
-       
-        <a class="gallery__item" href="${largeImageURL}">
-      
-                  <img class="gallery__image" src="${webformatURL}" alt="${tags}" loading="lazy" />
-                    <div class="gallery__item_info">
+    <div class="gallery-list">
+        <a class="gallery__link" href="${largeImageURL}">
+                  <div class="gallery__card">
+                   <img class="gallery__image" src="${webformatURL}" alt="${tags}" loading="lazy" />
+                 <div class="gallery__item-info">
                         <p class="item-info">
                           <b>Likes: </b>${likes}
                         </p>
@@ -102,9 +102,9 @@ function renderPhotos(hits) {
                           <b>Downloads: </b>${downloads}
                         </p>
                     </div>
-                
-          </a>
-    
+               </div>
+        </a>
+     </div>
       `,
     )
     .join('');
