@@ -54,8 +54,8 @@ refs.loadMoreBtn.addEventListener('click', () => {
 
 refs.searchForm.addEventListener('submit', e => {
   e.preventDefault();
+  page = 1;
   reset();
-  let page = 1;
   surchtags = refs.searchForm.elements.searchQuery.value.trim();
   if (surchtags === '') {
     reset();
