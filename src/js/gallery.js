@@ -28,29 +28,29 @@ async function getAxiosTag(surchtags, page) {
   }
 }
 refs.loadMoreBtn.classList.add('is-hidden');
-// refs.searchForm.addEventListener('input', e => {
-//   console.log(e.target);
-//   if (e.target !== 0) {
-//     refs.loadMoreBtn.classList.add('is-hidden');
-//     return reset();
-//   }
-// });
-refs.loadMoreBtn.addEventListener('click', () => {
-  getAxiosTag(surchtags, page).then(photos => {
-    renderPhotos(photos.hits);
-
-    page += 1;
-    if (page > photos.totalHits / perPage || photos.totalHits < perPage) {
-      // console.log(photos.totalHits);
-      // console.log(perPage);
-      // console.log(photos.totalHits < perPage);
-      // console.log(page > photos.totalHits / perPage);
-      notifyEndResult();
-      return refs.loadMoreBtn.classList.add('is-hidden');
-    }
-    refs.loadMoreBtn.classList.remove('is-hidden');
-  });
+refs.searchForm.addEventListener('input', e => {
+  console.log(e.target);
+  if (e.target !== 0) {
+    refs.loadMoreBtn.classList.add('is-hidden');
+    return reset();
+  }
 });
+// refs.loadMoreBtn.addEventListener('click', () => {
+//   getAxiosTag(surchtags, page).then(photos => {
+//     renderPhotos(photos.hits);
+
+//     page += 1;
+//     if (page > photos.totalHits / perPage || photos.totalHits < perPage) {
+//       // console.log(photos.totalHits);
+//       // console.log(perPage);
+//       // console.log(photos.totalHits < perPage);
+//       // console.log(page > photos.totalHits / perPage);
+//       notifyEndResult();
+//       return refs.loadMoreBtn.classList.add('is-hidden');
+//     }
+//     refs.loadMoreBtn.classList.remove('is-hidden');
+//   });
+// });
 
 refs.searchForm.addEventListener('submit', e => {
   e.preventDefault();
@@ -64,42 +64,29 @@ refs.searchForm.addEventListener('submit', e => {
   console.log(surchtags);
   getAxiosTag(surchtags, page).then(photos => {
     renderPhotos(photos.hits);
+
     console.log(photos);
     console.log(photos.hits);
     console.log(photos);
     console.log(photos.hits);
-    // const observer = new IntersectionObserver(onEntry, {
-    //   root: null,
-    //   rootMargin: '2px',
-    //   threshold: 1,
-    // });
-    // console.log(photos.hits);
-    // function onEntry({ hits }, observer) {
-    //   hits.map(hit => {
-    //     if (hit.isIntersecting) {
-    //       page += 3;
-    //       api(page);
-    //     }
-    //   });
-    // }
+    const observer = new IntersectionObserver(onEntry, {
+      root: null,
+      rootMargin: '2px',
+      threshold: 1,
+    });
+    console.log(photos.hits);
+    function onEntry({ hits }, observer) {
+      hits.map(hit => {
+        if (hit.isIntersecting) {
+          page += 3;
+          api(page);
+        }
+      });
+    }
 
     // console.log(onEntry());
     // onEntry();
-
-    window.onload = e => {
-      console.log(e.target);
-      console.log(e.currentTarget);
-
-      // устанавливаем настройки
-      const options = {
-        // родитель целевого элемента - область просмотра
-        root: null,
-        // без отступов
-        rootMargin: '0px',
-        // процент пересечения - половина изображения
-        threshold: 0.5,
-      };
-    };
+    // // ////////////////////////////////////////////////////////////
 
     if (photos.totalHits > 0) {
       notifySuccess(photos.totalHits);
@@ -110,8 +97,6 @@ refs.searchForm.addEventListener('submit', e => {
     if (page > photos.totalHits / perPage || photos.totalHits < perPage) {
       // console.log(photos.totalHits);
       // console.log(perPage);
-      // console.log(photos.totalHits < perPage);
-      // console.log(page > photos.totalHits / perPage);
       return refs.loadMoreBtn.classList.add('is-hidden');
     }
     refs.loadMoreBtn.classList.remove('is-hidden');
@@ -123,6 +108,12 @@ function renderPhotos(hits) {
     notifyFailure();
   }
   console.log(hits.length);
+
+  // let observer = new IntersectionObserver(
+  //   (hits, observer) => {
+  //     console.log(hits);
+  //     hits.forEach(hit => {
+  //       if (hit.isIntersecting) {
   const markup = hits
     .map(
       ({ webformatURL, tags, largeImageURL, likes, views, comments, downloads }) =>
@@ -152,8 +143,77 @@ function renderPhotos(hits) {
     )
     .join('');
   refs.galleryList.insertAdjacentHTML('beforeend', markup);
+  console.log(document.querySelector('li'));
+
+  //       }
+  //       observer.unobserve(hit.target);
+  //       console.log(hit.target);
+  //       observer.observe(document.querySelector('li:last-child'));
+  //     });
+  //   },
+  //   {
+  //     threshold: 1,
+  //   },
+  // );
+  // console.log(observer.observe(document.querySelector('li')));
+  // observer.observe(document.querySelector('li'));
+
   lightbox.refresh();
 }
+
+// function renderPhotos(hits) {
+//   if (hits.length === 0) {
+//     notifyFailure();
+//   }
+//   console.log(hits.length);
+//   const markup = hits
+//     .map(
+//       ({ webformatURL, tags, largeImageURL, likes, views, comments, downloads }) =>
+//         `
+//     <li class="gallery-list">
+//         <a class="gallery__link" href="${largeImageURL}">
+//                   <div class="gallery__card">
+//                    <img class="gallery__image" src="${webformatURL}" alt="${tags}" loading="lazy" />
+//                  <div class="gallery__item-info">
+//                         <p class="item-info">
+//                           <b>Likes: </b>${likes}
+//                         </p>
+//                         <p class="item-info">
+//                           <b>Views: </b>${views}
+//                         </p>
+//                         <p class="item-info">
+//                           <b>Comments: </b>${comments}
+//                         </p>
+//                         <p class="item-info">
+//                           <b>Downloads: </b>${downloads}
+//                         </p>
+//                     </div>
+//                </div>
+//         </a>
+//      </li>
+//       `,
+//     )
+//     .join('');
+//   refs.galleryList.insertAdjacentHTML('beforeend', markup);
+
+//   let observer = new IntersectionObserver(
+//     (entries, observer) => {
+//       entries.forEach(entry => {
+//         if (entry.isIntersecting) {
+//           createLi();
+//         }
+//         observer.unobserve(entry.target);
+//         observer.observe(document.querySelector('li:last-child'));
+//       });
+//     },
+//     {
+//       threshold: 1,
+//     },
+//   );
+
+//   observer.observe(document.querySelector('li'));
+//   lightbox.refresh();
+// }
 const lightbox = new SimpleLightbox('.gallery a', {
   captions: true,
   // captionsData: 'alt',
