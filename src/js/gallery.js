@@ -1,336 +1,3 @@
-// import axios from 'axios';
-// import { Notify } from 'notiflix/build/notiflix-notify-aio';
-// // import { getAxiosTag } from './api';
-// import SimpleLightbox from 'simplelightbox';
-// import 'simplelightbox/dist/simple-lightbox.min.css';
-// const refs = {
-//   searchForm: document.querySelector('#search-form'),
-//   galleryList: document.querySelector('.gallery'),
-//   loadMoreBtn: document.querySelector('.load-more'),
-//   inputEl: document.querySelector('.searchQuery'),
-// };
-// const perPage = 40;
-// let surchtags = '';
-// let page = 1;
-// const API_KEY = `24377768-1651c24dae1d00899e27f41ae`;
-// const BASE_URL = `https://pixabay.com/api`;
-// async function getAxiosTag(surchtags, page) {
-//   const URL = `${BASE_URL}/?key=${API_KEY}&q=${surchtags}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=${40}`;
-//   console.log(surchtags);
-//   try {
-//     const response = await axios.get(URL);
-//     console.log(response);
-//     console.log(response.data);
-//     console.log(response.data.hits);
-//     return await response.data;
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
-// // refs.loadMoreBtn.classList.add('is-hidden');
-// refs.searchForm.addEventListener('input', e => {
-//   console.log(e.target);
-//   if (e.target !== 0) {
-//     // refs.loadMoreBtn.classList.add('is-hidden');
-//     return reset();
-//   }
-// });
-// // refs.loadMoreBtn.addEventListener('click', () => {
-// //   getAxiosTag(surchtags, page).then(photos => {
-// //     renderPhotos(photos.hits);
-
-// //     page += 1;
-// //     if (page > photos.totalHits / perPage || photos.totalHits < perPage) {
-// //       // console.log(photos.totalHits);
-// //       // console.log(perPage);
-// //       // console.log(photos.totalHits < perPage);
-// //       // console.log(page > photos.totalHits / perPage);
-// //       notifyEndResult();
-// //       return refs.loadMoreBtn.classList.add('is-hidden');
-// //     }
-// //     refs.loadMoreBtn.classList.remove('is-hidden');
-// //   });
-// // });
-// // eg?????????????????????????????????????????????????????????
-// refs.searchForm.addEventListener('submit', e => {
-//   e.preventDefault();
-//   page = 1;
-//   reset();
-//   surchtags = refs.searchForm.elements.searchQuery.value.trim();
-//   if (surchtags === '') {
-//     reset();
-//     return notifyFailure();
-//   }
-//   console.log(surchtags);
-//   getAxiosTag(surchtags, page).then(photos => {
-//     // renderPhotos(photos.hits);
-//     // console.log(document.querySelector('li'));
-//     // console.log(document.querySelector('li:last-child'));
-
-//     // function onEntry(photos, observer) {
-//     //   photos.hits.forEach(hit => {
-//     //     console.log(hit.isIntersecting);
-//     //     if (hit.isIntersecting) {
-//     //       getAxiosTag(surchtags, page).then(photos => {
-//     //         renderPhotos(photos.hits);
-
-//     //         page += 1;
-//     //       });
-//     //     }
-//     //   });
-//     // }
-//     // const observer = new IntersectionObserver(onEntry, {
-//     //   root: null,
-//     //   rootMargin: '0px',
-//     //   threshold: 0.5,
-//     // });
-
-//     let observer = new IntersectionObserver(
-//       (hits, observer) => {
-//         console.log(hits);
-//         hits.forEach(hit => {
-//           if (hit.isIntersecting) {
-//             getAxiosTag(surchtags, page).then(photos => {
-//               renderPhotos(photos.hits);
-//               page += 1;
-//             });
-//           }
-//           observer.unobserve(hit.target);
-//           console.log(hit.target);
-//           observer.observe(document.querySelector('li:last-child'));
-//         });
-//       },
-//       {
-//         threshold: 1,
-//       },
-//     );
-//     observer.observe(document.querySelector('li'));
-
-//     console.log(photos);
-//     console.log(photos.hits);
-
-//     if (photos.totalHits > 0) {
-//       notifySuccess(photos.totalHits);
-//     }
-//     page += 1;
-//     if (page > photos.totalHits / perPage || photos.totalHits < perPage) {
-//       // console.log(photos.totalHits);
-//       // console.log(perPage);
-//       // return refs.loadMoreBtn.classList.add('is-hidden');
-//     }
-//     // refs.loadMoreBtn.classList.remove('is-hidden');
-//   });
-// });
-
-// // ???????????????????????????????????????????????????????????????????????????????????
-
-// // /////////////// ok///////////////////////////////
-// // refs.searchForm.addEventListener('submit', e => {
-// //   e.preventDefault();
-// //   page = 1;
-// //   reset();
-// //   surchtags = refs.searchForm.elements.searchQuery.value.trim();
-// //   if (surchtags === '') {
-// //     reset();
-// //     return notifyFailure();
-// //   }
-// //   console.log(surchtags);
-// //   getAxiosTag(surchtags, page).then(photos => {
-// //     renderPhotos(photos.hits);
-
-// //     console.log(photos);
-// //     console.log(photos.hits);
-// //     console.log(photos);
-// //     console.log(photos.hits);
-// //     // const observer = new IntersectionObserver(onEntry, {
-// //     //   root: null,
-// //     //   rootMargin: '2px',
-// //     //   threshold: 1,
-// //     // });
-// //     // console.log(photos.hits);
-// //     // function onEntry({ hits }, observer) {
-// //     //   hits.map(hit => {
-// //     //     if (hit.isIntersecting) {
-// //     //       page += 3;
-// //     //       api(page);
-// //     //     }
-// //     //   });
-// //     // }
-// //     if (photos.totalHits > 0) {
-// //       notifySuccess(photos.totalHits);
-// //     }
-
-// //     // refs.searchForm.reset();
-// //     page += 1;
-// //     if (page > photos.totalHits / perPage || photos.totalHits < perPage) {
-// //       // console.log(photos.totalHits);
-// //       // console.log(perPage);
-// //       return refs.loadMoreBtn.classList.add('is-hidden');
-// //     }
-// //     refs.loadMoreBtn.classList.remove('is-hidden');
-// //   });
-// // });
-// // /////////////// end ok///////////////////////////////
-
-// function renderPhotos(hits) {
-//   if (hits.length === 0) {
-//     notifyFailure();
-//   }
-//   console.log(hits.length);
-
-//   const markup = hits
-//     .map(
-//       ({ webformatURL, tags, largeImageURL, likes, views, comments, downloads }) =>
-//         `
-//     <li class="gallery-list">
-//         <a class="gallery__link" href="${largeImageURL}">
-//                   <div class="gallery__card">
-//                    <img class="gallery__image" src="${webformatURL}" alt="${tags}" loading="lazy" />
-//                  <div class="gallery__item-info">
-//                         <p class="item-info">
-//                           <b>Likes: </b>${likes}
-//                         </p>
-//                         <p class="item-info">
-//                           <b>Views: </b>${views}
-//                         </p>
-//                         <p class="item-info">
-//                           <b>Comments: </b>${comments}
-//                         </p>
-//                         <p class="item-info">
-//                           <b>Downloads: </b>${downloads}
-//                         </p>
-//                     </div>
-//                </div>
-//         </a>
-//      </li>
-//       `,
-//     )
-//     .join('');
-//   refs.galleryList.insertAdjacentHTML('beforeend', markup);
-//   console.log(document.querySelector('li'));
-//   lightbox.refresh();
-// }
-
-// // function renderPhotos(hits) {
-// //   if (hits.length === 0) {
-// //     notifyFailure();
-// //   }
-// //   console.log(hits.length);
-// //   const markup = hits
-// //     .map(
-// //       ({ webformatURL, tags, largeImageURL, likes, views, comments, downloads }) =>
-// //         `
-// //     <li class="gallery-list">
-// //         <a class="gallery__link" href="${largeImageURL}">
-// //                   <div class="gallery__card">
-// //                    <img class="gallery__image" src="${webformatURL}" alt="${tags}" loading="lazy" />
-// //                  <div class="gallery__item-info">
-// //                         <p class="item-info">
-// //                           <b>Likes: </b>${likes}
-// //                         </p>
-// //                         <p class="item-info">
-// //                           <b>Views: </b>${views}
-// //                         </p>
-// //                         <p class="item-info">
-// //                           <b>Comments: </b>${comments}
-// //                         </p>
-// //                         <p class="item-info">
-// //                           <b>Downloads: </b>${downloads}
-// //                         </p>
-// //                     </div>
-// //                </div>
-// //         </a>
-// //      </li>
-// //       `,
-// //     )
-// //     .join('');
-// //   refs.galleryList.insertAdjacentHTML('beforeend', markup);
-
-// //   let observer = new IntersectionObserver(
-// //     (entries, observer) => {
-// //       entries.forEach(entry => {
-// //         if (entry.isIntersecting) {
-// //           createLi();
-// //         }
-// //         observer.unobserve(entry.target);
-// //         observer.observe(document.querySelector('li:last-child'));
-// //       });
-// //     },
-// //     {
-// //       threshold: 1,
-// //     },
-// //   );
-
-// //   observer.observe(document.querySelector('li'));
-// //   lightbox.refresh();
-// // }
-// const lightbox = new SimpleLightbox('.gallery a', {
-//   captions: true,
-//   // captionsData: 'alt',
-//   captionDelay: 250,
-//   enableKeyboard: true,
-//   animationSlide: true,
-//   animationSpeed: 250,
-// });
-// function reset() {
-//   console.log('сброс');
-//   refs.galleryList.innerHTML = '';
-// }
-// function notifyFailure() {
-//   Notify.failure('Sorry, there are no images matching your search query. Please try again.', {
-//     showOnlyTheLastOne: true,
-//   });
-// }
-// function notifyEndResult() {
-//   Notify.failure('We`re sorry, but you`ve reached the end of search results.', {
-//     showOnlyTheLastOne: true,
-//   });
-// }
-// function notifySuccess(totalHits) {
-//   Notify.success(`Hooray! We found ${totalHits} images.`, {
-//     showOnlyTheLastOne: true,
-//   });
-// }
-// // ;
-// // ${hit.previewURL}
-// // function notifyInfo() {
-// //   Notify.info('Too many matches found. Please enter a more specific name.', {
-// //     showOnlyTheLastOne: true,
-// //   });
-// // {
-// /* ; */
-// // }
-// // if {hits.lengs === 0} {
-// // notifyFailure();
-// // console.log('ошибка')
-// // };
-// // \\\\\\\\\\\\\\\               to do
-// // \\\\\\\\\\\\\\\\\\\\
-// // const { height: cardHeight } = document
-// //   .querySelector('.gallery')
-// //   .firstElementChild.getBoundingClientRect();
-// // window.scrollBy({
-// //   top: cardHeight * 2,
-// //   behavior: 'smooth',
-// // });
-// // \\\\\\\\\\\\\\\\
-// // // \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-// // // function onEntry({ hits }, observer) {
-// // //   console.log(hits);
-// // //   hits.forEach(hit => {
-// // //     if (hit.isIntersecting) {
-// // //       page += 3;
-// // //       api(page);
-// // //     }
-// // //   });
-// // // }
-// // // const observer = new IntersectionObserver(onEntry, {
-// // //   root: null,
-// // //   rootMargin: '2px',
-// // //   threshold: 0.7,
-// // // });
-
-// ...............зроблено з кнопкою загрузки.........................................\\\\\\\\\\\\\\\\\\
 import axios from 'axios';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 // import { getAxiosTag } from './api';
@@ -364,23 +31,27 @@ refs.loadMoreBtn.classList.add('is-hidden');
 refs.searchForm.addEventListener('input', e => {
   console.log(e.target);
   if (e.target !== 0) {
-    refs.loadMoreBtn.classList.add('is-hidden');
+    // refs.loadMoreBtn.classList.add('is-hidden');
     return reset();
   }
 });
-refs.loadMoreBtn.addEventListener('click', () => {
-  getAxiosTag(surchtags, page).then(photos => {
-    renderPhotos(photos.hits);
+// refs.loadMoreBtn.addEventListener('click', () => {
+//   getAxiosTag(surchtags, page).then(photos => {
+//     renderPhotos(photos.hits);
 
-    page += 1;
-    if (page > photos.totalHits / perPage || photos.totalHits < perPage) {
-      notifyEndResult();
-      return refs.loadMoreBtn.classList.add('is-hidden');
-    }
-    refs.loadMoreBtn.classList.remove('is-hidden');
-  });
-});
-
+//     page += 1;
+//     if (page > photos.totalHits / perPage || photos.totalHits < perPage) {
+//       // console.log(photos.totalHits);
+//       // console.log(perPage);
+//       // console.log(photos.totalHits < perPage);
+//       // console.log(page > photos.totalHits / perPage);
+//       notifyEndResult();
+//       return refs.loadMoreBtn.classList.add('is-hidden');
+//     }
+//     refs.loadMoreBtn.classList.remove('is-hidden');
+//   });
+// });
+// eg?????????????????????????????????????????????????????????
 refs.searchForm.addEventListener('submit', e => {
   e.preventDefault();
   page = 1;
@@ -390,25 +61,82 @@ refs.searchForm.addEventListener('submit', e => {
     reset();
     return notifyFailure();
   }
-
+  console.log(surchtags);
   getAxiosTag(surchtags, page).then(photos => {
     renderPhotos(photos.hits);
+    console.log(document.querySelector('li'));
+    console.log(document.querySelector('li').getBoundingClientRect().height);
+    console.log(document.querySelector('.gallery').firstElementChild.getBoundingClientRect());
+    const cardHeight = document.querySelector('li').getBoundingClientRect().height;
+    console.log(cardHeight);
+    window.scrollBy({
+      top: cardHeight * 0.5,
+      behavior: 'smooth',
+    });
+    // console.log(document.querySelector('li:last-child'));
+
+    // function onEntry(photos, observer) {
+    //   photos.hits.forEach(hit => {
+    //     console.log(hit.isIntersecting);
+    //     if (hit.isIntersecting) {
+    //       getAxiosTag(surchtags, page).then(photos => {
+    //         renderPhotos(photos.hits);
+
+    //         page += 1;
+    //       });
+    //     }
+    //   });
+    // }
+    // const observer = new IntersectionObserver(onEntry, {
+    //   root: null,
+    //   rootMargin: '0px',
+    //   threshold: 0.5,
+    // });
+
+    // let observer = new IntersectionObserver(
+    //   (hits, observer) => {
+    //     console.log(hits);
+    //     hits.forEach(hit => {
+    //       if (hit.isIntersecting) {
+    //         getAxiosTag(surchtags, page).then(photos => {
+    //           renderPhotos(photos.hits);
+    //           page += 1;
+    //         });
+    //       }
+    //       observer.unobserve(hit.target);
+    //       console.log(hit.target);
+    //       observer.observe(document.querySelector('li:last-child'));
+    //     });
+    //   },
+    //   {
+    //     threshold: 1,
+    //   },
+    // );
+    // observer.observe(document.querySelector('li'));
+
+    console.log(photos);
+    console.log(photos.hits);
 
     if (photos.totalHits > 0) {
       notifySuccess(photos.totalHits);
     }
     page += 1;
     if (page > photos.totalHits / perPage || photos.totalHits < perPage) {
-      return refs.loadMoreBtn.classList.add('is-hidden');
+      // console.log(photos.totalHits);
+      // console.log(perPage);
+      // return refs.loadMoreBtn.classList.add('is-hidden');
     }
-    refs.loadMoreBtn.classList.remove('is-hidden');
+    // refs.loadMoreBtn.classList.remove('is-hidden');
   });
 });
+
+// ???????????????????????????????????????????????????????????????????????????????????
 
 function renderPhotos(hits) {
   if (hits.length === 0) {
     notifyFailure();
   }
+  console.log(hits.length);
 
   const markup = hits
     .map(
@@ -439,6 +167,7 @@ function renderPhotos(hits) {
     )
     .join('');
   refs.galleryList.insertAdjacentHTML('beforeend', markup);
+
   lightbox.refresh();
 }
 
@@ -497,6 +226,7 @@ function renderPhotos(hits) {
 // }
 const lightbox = new SimpleLightbox('.gallery a', {
   captions: true,
+  // captionsData: 'alt',
   captionDelay: 250,
   enableKeyboard: true,
   animationSlide: true,
@@ -522,7 +252,166 @@ function notifySuccess(totalHits) {
   });
 }
 
-// ............... кінець "зроблено з кнопкою загрузки"....................\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+// \\\\\\\\\\\\\\\               to do
+// \\\\\\\\\\\\\\\\\\\\
+
+// \\\\\\\\\\\\\\\\
+// // \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+// // function onEntry({ hits }, observer) {
+// //   console.log(hits);
+// //   hits.forEach(hit => {
+// //     if (hit.isIntersecting) {
+// //       page += 3;
+// //       api(page);
+// //     }
+// //   });
+// // }
+// // const observer = new IntersectionObserver(onEntry, {
+// //   root: null,
+// //   rootMargin: '2px',
+// //   threshold: 0.7,
+// // });
+
+// // ...............зроблено з кнопкою загрузки.........................................\\\\\\\\\\\\\\\\\\
+// import axios from 'axios';
+// import { Notify } from 'notiflix/build/notiflix-notify-aio';
+// // import { getAxiosTag } from './api';
+// import SimpleLightbox from 'simplelightbox';
+// import 'simplelightbox/dist/simple-lightbox.min.css';
+// const refs = {
+//   searchForm: document.querySelector('#search-form'),
+//   galleryList: document.querySelector('.gallery'),
+//   loadMoreBtn: document.querySelector('.load-more'),
+//   inputEl: document.querySelector('.searchQuery'),
+// };
+// const perPage = 40;
+// let surchtags = '';
+// let page = 1;
+// const API_KEY = `24377768-1651c24dae1d00899e27f41ae`;
+// const BASE_URL = `https://pixabay.com/api`;
+// async function getAxiosTag(surchtags, page) {
+//   const URL = `${BASE_URL}/?key=${API_KEY}&q=${surchtags}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=${40}`;
+//   console.log(surchtags);
+//   try {
+//     const response = await axios.get(URL);
+//     console.log(response);
+//     console.log(response.data);
+//     console.log(response.data.hits);
+//     return await response.data;
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }
+// refs.loadMoreBtn.classList.add('is-hidden');
+// refs.searchForm.addEventListener('input', e => {
+//   console.log(e.target);
+//   if (e.target !== 0) {
+//     refs.loadMoreBtn.classList.add('is-hidden');
+//     return reset();
+//   }
+// });
+// refs.loadMoreBtn.addEventListener('click', () => {
+//   getAxiosTag(surchtags, page).then(photos => {
+//     renderPhotos(photos.hits);
+
+//     page += 1;
+//     if (page > photos.totalHits / perPage || photos.totalHits < perPage) {
+//       notifyEndResult();
+//       return refs.loadMoreBtn.classList.add('is-hidden');
+//     }
+//     refs.loadMoreBtn.classList.remove('is-hidden');
+//   });
+// });
+
+// refs.searchForm.addEventListener('submit', e => {
+//   e.preventDefault();
+//   page = 1;
+//   reset();
+//   surchtags = refs.searchForm.elements.searchQuery.value.trim();
+//   if (surchtags === '') {
+//     reset();
+//     return notifyFailure();
+//   }
+
+//   getAxiosTag(surchtags, page).then(photos => {
+//     renderPhotos(photos.hits);
+
+//     if (photos.totalHits > 0) {
+//       notifySuccess(photos.totalHits);
+//     }
+//     page += 1;
+//     if (page > photos.totalHits / perPage || photos.totalHits < perPage) {
+//       return refs.loadMoreBtn.classList.add('is-hidden');
+//     }
+//     refs.loadMoreBtn.classList.remove('is-hidden');
+//   });
+// });
+
+// function renderPhotos(hits) {
+//   if (hits.length === 0) {
+//     notifyFailure();
+//   }
+
+//   const markup = hits
+//     .map(
+//       ({ webformatURL, tags, largeImageURL, likes, views, comments, downloads }) =>
+//         `
+//     <li class="gallery-list">
+//         <a class="gallery__link" href="${largeImageURL}">
+//                   <div class="gallery__card">
+//                    <img class="gallery__image" src="${webformatURL}" alt="${tags}" loading="lazy" />
+//                  <div class="gallery__item-info">
+//                         <p class="item-info">
+//                           <b>Likes: </b>${likes}
+//                         </p>
+//                         <p class="item-info">
+//                           <b>Views: </b>${views}
+//                         </p>
+//                         <p class="item-info">
+//                           <b>Comments: </b>${comments}
+//                         </p>
+//                         <p class="item-info">
+//                           <b>Downloads: </b>${downloads}
+//                         </p>
+//                     </div>
+//                </div>
+//         </a>
+//      </li>
+//       `,
+//     )
+//     .join('');
+//   refs.galleryList.insertAdjacentHTML('beforeend', markup);
+//   lightbox.refresh();
+// }
+
+// const lightbox = new SimpleLightbox('.gallery a', {
+//   captions: true,
+//   captionDelay: 250,
+//   enableKeyboard: true,
+//   animationSlide: true,
+//   animationSpeed: 250,
+// });
+// function reset() {
+//   console.log('сброс');
+//   refs.galleryList.innerHTML = '';
+// }
+// function notifyFailure() {
+//   Notify.failure('Sorry, there are no images matching your search query. Please try again.', {
+//     showOnlyTheLastOne: true,
+//   });
+// }
+// function notifyEndResult() {
+//   Notify.failure('We`re sorry, but you`ve reached the end of search results.', {
+//     showOnlyTheLastOne: true,
+//   });
+// }
+// function notifySuccess(totalHits) {
+//   Notify.success(`Hooray! We found ${totalHits} images.`, {
+//     showOnlyTheLastOne: true,
+//   });
+// }
+
+// // ............... кінець "зроблено з кнопкою загрузки"....................\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 // //\..............1-я попытка..... зроблено без axios ...............\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 // //
