@@ -38,6 +38,7 @@ refs.loadMoreBtn.classList.add('is-hidden');
 refs.loadMoreBtn.addEventListener('click', () => {
   getAxiosTag(surchtags, page).then(photos => {
     renderPhotos(photos.hits);
+
     page += 1;
     if (page > photos.totalHits / perPage || photos.totalHits < perPage) {
       // console.log(photos.totalHits);
@@ -50,8 +51,10 @@ refs.loadMoreBtn.addEventListener('click', () => {
     refs.loadMoreBtn.classList.remove('is-hidden');
   });
 });
+
 refs.searchForm.addEventListener('submit', e => {
   e.preventDefault();
+  reset();
   surchtags = refs.searchForm.elements.searchQuery.value.trim();
   if (surchtags === '') {
     reset();
@@ -62,6 +65,40 @@ refs.searchForm.addEventListener('submit', e => {
     renderPhotos(photos.hits);
     console.log(photos);
     console.log(photos.hits);
+    console.log(photos);
+    console.log(photos.hits);
+    // const observer = new IntersectionObserver(onEntry, {
+    //   root: null,
+    //   rootMargin: '2px',
+    //   threshold: 1,
+    // });
+    // console.log(photos.hits);
+    // function onEntry({ hits }, observer) {
+    //   hits.map(hit => {
+    //     if (hit.isIntersecting) {
+    //       page += 3;
+    //       api(page);
+    //     }
+    //   });
+    // }
+
+    // console.log(onEntry());
+    // onEntry();
+
+    window.onload = e => {
+      console.log(e.target);
+      console.log(e.currentTarget);
+
+      // устанавливаем настройки
+      const options = {
+        // родитель целевого элемента - область просмотра
+        root: null,
+        // без отступов
+        rootMargin: '0px',
+        // процент пересечения - половина изображения
+        threshold: 0.5,
+      };
+    };
 
     if (photos.totalHits > 0) {
       notifySuccess(photos.totalHits);
@@ -79,8 +116,7 @@ refs.searchForm.addEventListener('submit', e => {
     refs.loadMoreBtn.classList.remove('is-hidden');
   });
 });
-// console.log(photos);
-// console.log(photos.hits);
+
 function renderPhotos(hits) {
   if (hits.length === 0) {
     notifyFailure();
