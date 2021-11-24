@@ -31,7 +31,7 @@ refs.loadMoreBtn.classList.add('is-hidden');
 refs.searchForm.addEventListener('input', e => {
   console.log(e.target);
   if (e.target !== 0) {
-    // refs.loadMoreBtn.classList.add('is-hidden');
+    refs.loadMoreBtn.classList.add('is-hidden');
     return reset();
   }
 });
@@ -51,16 +51,44 @@ refs.searchForm.addEventListener('input', e => {
 //     refs.loadMoreBtn.classList.remove('is-hidden');
 //   });
 // });
-// eg?????????????????????????????????????????????????????????
+window.addEventListener('scroll', () => {
+  // galleryHeight = document.querySelector('ul').getBoundingClientRect().height;
+  const galleryHeightTop = document.querySelector('ul').getBoundingClientRect().top;
+  const galleryHeightBottom = document.querySelector('ul').getBoundingClientRect().bottom;
+  console.log(galleryHeightTop);
+  console.log(galleryHeightBottom);
+  console.log(document.documentElement.clientHeight);
+  if (galleryHeightBottom < document.documentElement.clientHeight) {
+    // page += 1;
+    if (surchtags === '') {
+      reset();
+    }
+    getAxiosTag(surchtags, page).then(photos => {
+      renderPhotos(photos.hits);
+
+      page += 1;
+      if (page > photos.totalHits / perPage || photos.totalHits < perPage) {
+        return refs.loadMoreBtn.classList.add('is-hidden');
+      }
+      refs.loadMoreBtn.classList.remove('is-hidden');
+    });
+    // });
+  }
+  if (galleryHeightBottom === document.documentElement.clientHeight) {
+    notifyEndResult();
+  }
+});
+
 refs.searchForm.addEventListener('submit', e => {
   e.preventDefault();
   page = 1;
   reset();
   surchtags = refs.searchForm.elements.searchQuery.value.trim();
-  if (surchtags === '') {
-    reset();
-    return notifyFailure();
-  }
+  // if (surchtags === '') {
+  //   reset();
+  //   return notifyFailure();
+  // }
+
   console.log(surchtags);
   getAxiosTag(surchtags, page).then(photos => {
     renderPhotos(photos.hits);
@@ -70,49 +98,10 @@ refs.searchForm.addEventListener('submit', e => {
     const cardHeight = document.querySelector('li').getBoundingClientRect().height;
     console.log(cardHeight);
     window.scrollBy({
-      top: cardHeight * 0.5,
+      top: cardHeight * 0.4,
       behavior: 'smooth',
     });
-    // console.log(document.querySelector('li:last-child'));
-
-    // function onEntry(photos, observer) {
-    //   photos.hits.forEach(hit => {
-    //     console.log(hit.isIntersecting);
-    //     if (hit.isIntersecting) {
-    //       getAxiosTag(surchtags, page).then(photos => {
-    //         renderPhotos(photos.hits);
-
-    //         page += 1;
-    //       });
-    //     }
-    //   });
-    // }
-    // const observer = new IntersectionObserver(onEntry, {
-    //   root: null,
-    //   rootMargin: '0px',
-    //   threshold: 0.5,
-    // });
-
-    // let observer = new IntersectionObserver(
-    //   (hits, observer) => {
-    //     console.log(hits);
-    //     hits.forEach(hit => {
-    //       if (hit.isIntersecting) {
-    //         getAxiosTag(surchtags, page).then(photos => {
-    //           renderPhotos(photos.hits);
-    //           page += 1;
-    //         });
-    //       }
-    //       observer.unobserve(hit.target);
-    //       console.log(hit.target);
-    //       observer.observe(document.querySelector('li:last-child'));
-    //     });
-    //   },
-    //   {
-    //     threshold: 1,
-    //   },
-    // );
-    // observer.observe(document.querySelector('li'));
+    // page += 1;
 
     console.log(photos);
     console.log(photos.hits);
@@ -120,17 +109,13 @@ refs.searchForm.addEventListener('submit', e => {
     if (photos.totalHits > 0) {
       notifySuccess(photos.totalHits);
     }
-    page += 1;
+
     if (page > photos.totalHits / perPage || photos.totalHits < perPage) {
-      // console.log(photos.totalHits);
-      // console.log(perPage);
-      // return refs.loadMoreBtn.classList.add('is-hidden');
+      return refs.loadMoreBtn.classList.add('is-hidden');
     }
-    // refs.loadMoreBtn.classList.remove('is-hidden');
+    refs.loadMoreBtn.classList.remove('is-hidden');
   });
 });
-
-// ???????????????????????????????????????????????????????????????????????????????????
 
 function renderPhotos(hits) {
   if (hits.length === 0) {
@@ -171,62 +156,8 @@ function renderPhotos(hits) {
   lightbox.refresh();
 }
 
-// function renderPhotos(hits) {
-//   if (hits.length === 0) {
-//     notifyFailure();
-//   }
-//   console.log(hits.length);
-//   const markup = hits
-//     .map(
-//       ({ webformatURL, tags, largeImageURL, likes, views, comments, downloads }) =>
-//         `
-//     <li class="gallery-list">
-//         <a class="gallery__link" href="${largeImageURL}">
-//                   <div class="gallery__card">
-//                    <img class="gallery__image" src="${webformatURL}" alt="${tags}" loading="lazy" />
-//                  <div class="gallery__item-info">
-//                         <p class="item-info">
-//                           <b>Likes: </b>${likes}
-//                         </p>
-//                         <p class="item-info">
-//                           <b>Views: </b>${views}
-//                         </p>
-//                         <p class="item-info">
-//                           <b>Comments: </b>${comments}
-//                         </p>
-//                         <p class="item-info">
-//                           <b>Downloads: </b>${downloads}
-//                         </p>
-//                     </div>
-//                </div>
-//         </a>
-//      </li>
-//       `,
-//     )
-//     .join('');
-//   refs.galleryList.insertAdjacentHTML('beforeend', markup);
-
-//   let observer = new IntersectionObserver(
-//     (entries, observer) => {
-//       entries.forEach(entry => {
-//         if (entry.isIntersecting) {
-//           createLi();
-//         }
-//         observer.unobserve(entry.target);
-//         observer.observe(document.querySelector('li:last-child'));
-//       });
-//     },
-//     {
-//       threshold: 1,
-//     },
-//   );
-
-//   observer.observe(document.querySelector('li'));
-//   lightbox.refresh();
-// }
 const lightbox = new SimpleLightbox('.gallery a', {
   captions: true,
-  // captionsData: 'alt',
   captionDelay: 250,
   enableKeyboard: true,
   animationSlide: true,
@@ -252,25 +183,31 @@ function notifySuccess(totalHits) {
   });
 }
 
-// \\\\\\\\\\\\\\\               to do
-// \\\\\\\\\\\\\\\\\\\\
-
-// \\\\\\\\\\\\\\\\
-// // \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-// // function onEntry({ hits }, observer) {
-// //   console.log(hits);
-// //   hits.forEach(hit => {
-// //     if (hit.isIntersecting) {
-// //       page += 3;
-// //       api(page);
-// //     }
-// //   });
-// // }
-// // const observer = new IntersectionObserver(onEntry, {
-// //   root: null,
-// //   rootMargin: '2px',
-// //   threshold: 0.7,
-// // });
+// const observer = new IntersectionObserver(onEntry, {
+//   root: null,
+//   rootMargin: '0px',
+//   threshold: 0.5,
+// });
+// let observer = new IntersectionObserver(
+//   (hits, observer) => {
+//     console.log(hits);
+//     hits.forEach(hit => {
+//       if (hit.isIntersecting) {
+//         getAxiosTag(surchtags, page).then(photos => {
+//           renderPhotos(photos.hits);
+//           page += 1;
+//         });
+//       }
+//       observer.unobserve(hit.target);
+//       console.log(hit.target);
+//       observer.observe(document.querySelector('li:last-child'));
+//     });
+//   },
+//   {
+//     threshold: 1,
+//   },
+// );
+// observer.observe(document.querySelector('li'));
 
 // // ...............зроблено з кнопкою загрузки.........................................\\\\\\\\\\\\\\\\\\
 // import axios from 'axios';
@@ -335,7 +272,12 @@ function notifySuccess(totalHits) {
 
 //   getAxiosTag(surchtags, page).then(photos => {
 //     renderPhotos(photos.hits);
-
+// const cardHeight = document.querySelector('li').getBoundingClientRect().height;
+// console.log(cardHeight);
+// window.scrollBy({
+//   top: cardHeight * 0.5,
+//   behavior: 'smooth',
+// });
 //     if (photos.totalHits > 0) {
 //       notifySuccess(photos.totalHits);
 //     }
