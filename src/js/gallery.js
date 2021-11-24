@@ -1,3 +1,4 @@
+// // ...............зроблено з кнопкою загрузки.........................................\\\\\\\\\\\\\\\\\\
 import axios from 'axios';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 // import { getAxiosTag } from './api';
@@ -75,28 +76,6 @@ refs.searchForm.addEventListener('submit', e => {
     }
     refs.loadMoreBtn.classList.remove('is-hidden');
   });
-  function onEntry(entries, observer) {
-    entries.forEach(entry => {
-      console.log('onEntry');
-      if (entry.isIntersecting) {
-        console.log('onEntry if ');
-        page += 1;
-        getAxiosTag(surchtags, page).then(photos => {
-          renderPhotos(photos.hits);
-          console.log('onEntry renderPhotos ');
-        });
-      }
-    });
-  }
-  console.log('ofEntry renderPhotos ');
-
-  const observer = new IntersectionObserver(onEntry, {
-    root: null,
-    rootMargin: '0px',
-    threshold: 1,
-  });
-  observer.observe(document.querySelector('ul'));
-  console.log('observer.observe');
 });
 
 function renderPhotos(hits) {
@@ -163,10 +142,9 @@ function notifySuccess(totalHits) {
   });
 }
 
-// observer.observe(document.querySelector('li:last-child'));
-// .........................  end.......................................
+// // ............... кінець "зроблено з кнопкою загрузки"....................\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-// // ...............зроблено з кнопкою загрузки.........................................\\\\\\\\\\\\\\\\\\
+// // ............... спроба зробити бескінечний скрол метеодом Intersection Observer API.........../////
 // import axios from 'axios';
 // import { Notify } from 'notiflix/build/notiflix-notify-aio';
 // // import { getAxiosTag } from './api';
@@ -204,18 +182,6 @@ function notifySuccess(totalHits) {
 //     return reset();
 //   }
 // });
-// refs.loadMoreBtn.addEventListener('click', () => {
-//   getAxiosTag(surchtags, page).then(photos => {
-//     renderPhotos(photos.hits);
-
-//     page += 1;
-//     if (page > photos.totalHits / perPage || photos.totalHits < perPage) {
-//       notifyEndResult();
-//       return refs.loadMoreBtn.classList.add('is-hidden');
-//     }
-//     refs.loadMoreBtn.classList.remove('is-hidden');
-//   });
-// });
 
 // refs.searchForm.addEventListener('submit', e => {
 //   e.preventDefault();
@@ -229,12 +195,12 @@ function notifySuccess(totalHits) {
 
 //   getAxiosTag(surchtags, page).then(photos => {
 //     renderPhotos(photos.hits);
-// const cardHeight = document.querySelector('li').getBoundingClientRect().height;
-// console.log(cardHeight);
-// window.scrollBy({
-//   top: cardHeight * 0.5,
-//   behavior: 'smooth',
-// });
+//     const cardHeight = document.querySelector('li').getBoundingClientRect().height;
+//     console.log(cardHeight);
+//     window.scrollBy({
+//       top: cardHeight * 0.5,
+//       behavior: 'smooth',
+//     });
 //     if (photos.totalHits > 0) {
 //       notifySuccess(photos.totalHits);
 //     }
@@ -244,6 +210,28 @@ function notifySuccess(totalHits) {
 //     }
 //     refs.loadMoreBtn.classList.remove('is-hidden');
 //   });
+//   function onEntry(entries, observer) {
+//     entries.forEach(entry => {
+//       if (entry.isIntersecting) {
+//         getAxiosTag(surchtags, page).then(photos => {
+//           renderPhotos(photos.hits);
+
+//           page += 1;
+//           if (page > photos.totalHits / perPage || photos.totalHits < perPage) {
+//             notifyEndResult();
+//             return refs.loadMoreBtn.classList.add('is-hidden');
+//           }
+//           refs.loadMoreBtn.classList.remove('is-hidden');
+//         });
+//       }
+//     });
+//   }
+//   const observer = new IntersectionObserver(onEntry, {
+//     root: null,
+//     rootMargin: '0px',
+//     threshold: 0.1,
+//   });
+//   observer.observe(document.querySelector('ul'));
 // });
 
 // function renderPhotos(hits) {
@@ -309,8 +297,7 @@ function notifySuccess(totalHits) {
 //     showOnlyTheLastOne: true,
 //   });
 // }
-
-// // ............... кінець "зроблено з кнопкою загрузки"....................\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+// // .........................  end.......................................
 
 // //\..............1-я попытка..... зроблено без axios ...............\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 // //
