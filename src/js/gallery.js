@@ -41,87 +41,72 @@ refs.searchForm.addEventListener('input', e => {
 
 //     page += 1;
 //     if (page > photos.totalHits / perPage || photos.totalHits < perPage) {
-//       // console.log(photos.totalHits);
-//       // console.log(perPage);
-//       // console.log(photos.totalHits < perPage);
-//       // console.log(page > photos.totalHits / perPage);
 //       notifyEndResult();
 //       return refs.loadMoreBtn.classList.add('is-hidden');
 //     }
 //     refs.loadMoreBtn.classList.remove('is-hidden');
 //   });
 // });
-window.addEventListener('scroll', () => {
-  // galleryHeight = document.querySelector('ul').getBoundingClientRect().height;
-  const galleryHeightTop = document.querySelector('ul').getBoundingClientRect().top;
-  const galleryHeightBottom = document.querySelector('ul').getBoundingClientRect().bottom;
-  console.log(galleryHeightTop);
-  console.log(galleryHeightBottom);
-  console.log(document.documentElement.clientHeight);
-  if (galleryHeightBottom < document.documentElement.clientHeight) {
-    // page += 1;
-    if (surchtags === '') {
-      reset();
-    }
-    getAxiosTag(surchtags, page).then(photos => {
-      renderPhotos(photos.hits);
-
-      page += 1;
-      if (page > photos.totalHits / perPage || photos.totalHits < perPage) {
-        return refs.loadMoreBtn.classList.add('is-hidden');
-      }
-      refs.loadMoreBtn.classList.remove('is-hidden');
-    });
-    // });
-  }
-  if (galleryHeightBottom === document.documentElement.clientHeight) {
-    notifyEndResult();
-  }
-});
 
 refs.searchForm.addEventListener('submit', e => {
   e.preventDefault();
   page = 1;
   reset();
   surchtags = refs.searchForm.elements.searchQuery.value.trim();
-  // if (surchtags === '') {
-  //   reset();
-  //   return notifyFailure();
-  // }
+  if (surchtags === '') {
+    reset();
+    return notifyFailure();
+  }
 
-  console.log(surchtags);
   getAxiosTag(surchtags, page).then(photos => {
     renderPhotos(photos.hits);
-    console.log(document.querySelector('li'));
-    console.log(document.querySelector('li').getBoundingClientRect().height);
-    console.log(document.querySelector('.gallery').firstElementChild.getBoundingClientRect());
+
     const cardHeight = document.querySelector('li').getBoundingClientRect().height;
     console.log(cardHeight);
     window.scrollBy({
-      top: cardHeight * 0.4,
+      top: cardHeight * 0.5,
       behavior: 'smooth',
     });
-    // page += 1;
-
-    console.log(photos);
-    console.log(photos.hits);
-
     if (photos.totalHits > 0) {
       notifySuccess(photos.totalHits);
     }
-
+    page += 1;
     if (page > photos.totalHits / perPage || photos.totalHits < perPage) {
       return refs.loadMoreBtn.classList.add('is-hidden');
     }
     refs.loadMoreBtn.classList.remove('is-hidden');
   });
 });
+function onEntry(entries, observer) {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      console.log(entry);
+      console.log(entry.target);
+      page += 1;
+      getAxiosTag(surchtags, page).then(photos => {
+        renderPhotos(photos.hits);
+
+        page += 1;
+        if (page > photos.totalHits / perPage || photos.totalHits < perPage) {
+          notifyEndResult();
+          return refs.loadMoreBtn.classList.add('is-hidden');
+        }
+        refs.loadMoreBtn.classList.remove('is-hidden');
+      });
+    }
+  });
+}
+const observer = new IntersectionObserver(onEntry, {
+  root: null,
+  rootMargin: '100px',
+  threshold: 0.5,
+});
+observer.observe(galleryList);
 
 function renderPhotos(hits) {
   if (hits.length === 0) {
     notifyFailure();
   }
-  console.log(hits.length);
 
   const markup = hits
     .map(
