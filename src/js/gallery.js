@@ -52,7 +52,8 @@ refs.loadMoreBtn.addEventListener('click', () => {
 refs.searchForm.addEventListener('submit', e => {
   e.preventDefault();
   page = 1;
-  reset();
+  // reset();
+  console.log(surchtags);
   surchtags = refs.searchForm.elements.searchQuery.value.trim();
   if (surchtags === '') {
     reset();
@@ -141,6 +142,26 @@ function notifySuccess(totalHits) {
     showOnlyTheLastOne: true,
   });
 }
+const loadMoreBtn = document.querySelector('.load-more');
+function onEntry(entries, observer) {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      page += 1;
+      console.log('surchtags', surchtags);
+      getAxiosTag(surchtags, page).then(photos => {
+        renderPhotos(photos.hits);
+      });
+    }
+  });
+}
+
+const observer = new IntersectionObserver(onEntry, {
+  root: null,
+  rootMargin: '0px',
+  threshold: 0.5,
+});
+observer.observe(loadMoreBtn);
+// intersectionObserver.observer(document.querySelector('.ul'));
 
 // // ............... кінець "зроблено з кнопкою загрузки"....................\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
